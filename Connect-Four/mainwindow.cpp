@@ -116,17 +116,16 @@ void MainWindow::BackToMenu()
 
 void MainWindow::set_disc(bool is_clicked)
 {
+    char set_button[20];
     QPushButton * button_pressed = (QPushButton *)sender();
-    button_pressed->setEnabled(false);
     this->hide();
     const char * t;
     t = button_pressed->objectName().toStdString().c_str();
-    qDebug() << "AM FOST APELAT" ;
+    //qDebug() << "AM FOST APELAT" ;
     write(this->server , t , 20);
+    read(this->server ,set_button , sizeof(set_button));
+    this->set_current_player_choice(set_button);
     use_player_turn();
-   // use_player_turn();
-    //qDebug() << button_pressed->objectName();
-    //send server choice and disable the button
 
 }
 
@@ -144,18 +143,22 @@ void MainWindow::set_color()
 
 void MainWindow::use_player_turn()
 {
-    qDebug() <<"SUNT AICI";
+    char other_player_move[20];
+    memset(other_player_move , 0 , sizeof(other_player_move));
+    //qDebug() <<"SUNT AICI";
     if(read(this->server , &my_turn , 1) == -1){
         return;
     }
     this->already_clicked = false;
-    qDebug() << (int)this->my_turn;
+    //qDebug() << (int)this->my_turn;
     if(this->my_turn > 0){
         this->show();
         this->setEnabled(true);
     }
     else{
         this->setEnabled(false);
+        read(this->server , other_player_move , sizeof(other_player_move));
+        this->set_other_player_choice(other_player_move);
         use_player_turn();
     }
 }
@@ -172,4 +175,600 @@ void MainWindow::click_wrapper()
         set_disc(true);
     }
     return;
+}
+
+
+void MainWindow::set_other_player_choice(char * move)
+{
+    if(strcmp(move , "p1_1") == 0){
+        ui->p1_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_1") == 0){
+        ui->p2_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_1") == 0){
+        ui->p3_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_1") == 0){
+        ui->p4_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_1") == 0){
+        ui->p5_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_1") == 0){
+        ui->p6_1->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_1->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_1->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_2") == 0){
+        ui->p1_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_2") == 0){
+        ui->p2_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_2") == 0){
+        ui->p3_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_2") == 0){
+        ui->p4_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_2") == 0){
+        ui->p5_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_2") == 0){
+        ui->p6_2->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_2->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_2->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_3") == 0){
+        ui->p1_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_3") == 0){
+        ui->p2_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_3") == 0){
+        ui->p3_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_3") == 0){
+        ui->p4_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_3") == 0){
+        ui->p5_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_3") == 0){
+        ui->p6_3->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_3->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_3->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_4") == 0){
+        ui->p1_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_4") == 0){
+        ui->p2_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_4") == 0){
+        ui->p3_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_4") == 0){
+        ui->p4_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_4") == 0){
+        ui->p5_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_4") == 0){
+        ui->p6_4->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_4->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_4->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_5") == 0){
+        ui->p1_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_5") == 0){
+        ui->p2_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_5") == 0){
+        ui->p3_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_5") == 0){
+        ui->p4_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_5") == 0){
+        ui->p5_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_5") == 0){
+        ui->p6_5->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_5->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_5->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_6") == 0){
+        ui->p1_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_6") == 0){
+        ui->p2_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_6") == 0){
+        ui->p3_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_6") == 0){
+        ui->p4_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_6") == 0){
+        ui->p5_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_6") == 0){
+        ui->p6_6->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_6->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_6->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p1_7") == 0){
+        ui->p1_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p1_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p1_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p2_7") == 0){
+        ui->p2_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p2_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p2_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p3_7") == 0){
+        ui->p3_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p3_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p3_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p4_7") == 0){
+        ui->p4_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p4_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p4_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p5_7") == 0){
+        ui->p5_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p5_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p5_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+    if(strcmp(move , "p6_7") == 0){
+        ui->p6_7->setDisabled(true);
+        if(this->player_yellow == 1){
+            ui->p6_7->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
+        if(this->player_red == 1){
+            ui->p6_7->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        return;
+    }
+}
+
+
+void MainWindow::set_current_player_choice(char * move){
+    if(strcmp(move , "p1_1") == 0){
+        ui->p1_1->setDisabled(true);
+    }
+    if(strcmp(move , "p2_1") == 0){
+        ui->p2_1->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_1") == 0){
+        ui->p3_1->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_1") == 0){
+        ui->p4_1->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_1") == 0){
+        ui->p5_1->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_1") == 0){
+        ui->p6_1->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_2") == 0){
+        ui->p1_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_2") == 0){
+        ui->p2_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_2") == 0){
+        ui->p3_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_2") == 0){
+        ui->p4_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_2") == 0){
+        ui->p5_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_2") == 0){
+        ui->p6_2->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_3") == 0){
+        ui->p1_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_3") == 0){
+        ui->p2_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_3") == 0){
+        ui->p3_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_3") == 0){
+        ui->p4_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_3") == 0){
+        ui->p5_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_3") == 0){
+        ui->p6_3->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_4") == 0){
+        ui->p1_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_4") == 0){
+        ui->p2_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_4") == 0){
+        ui->p3_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_4") == 0){
+        ui->p4_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_4") == 0){
+        ui->p5_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_4") == 0){
+        ui->p6_4->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_5") == 0){
+        ui->p1_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_5") == 0){
+        ui->p2_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_5") == 0){
+        ui->p3_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_5") == 0){
+        ui->p4_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_5") == 0){
+        ui->p5_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_5") == 0){
+        ui->p6_5->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_6") == 0){
+        ui->p1_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_6") == 0){
+        ui->p2_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_6") == 0){
+        ui->p3_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_6") == 0){
+        ui->p4_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_6") == 0){
+        ui->p5_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_6") == 0){
+        ui->p6_6->setDisabled(true);
+
+    }
+    if(strcmp(move , "p1_7") == 0){
+        ui->p1_7->setDisabled(true);
+
+    }
+    if(strcmp(move , "p2_7") == 0){
+        ui->p2_7->setDisabled(true);
+
+    }
+    if(strcmp(move , "p3_7") == 0){
+        ui->p3_7->setDisabled(true);
+
+    }
+    if(strcmp(move , "p4_7") == 0){
+        ui->p4_7->setDisabled(true);
+
+    }
+    if(strcmp(move , "p5_7") == 0){
+        ui->p5_7->setDisabled(true);
+
+    }
+    if(strcmp(move , "p6_7") == 0){
+        ui->p6_7->setDisabled(true);
+
+    }
 }

@@ -22,6 +22,8 @@ public:
     void use_player_turn();
     void set_color();
     void set_server(int fd_server);
+    void set_other_player_choice(char * move);
+    void set_current_player_choice(char * move);
 
 
     ~MainWindow();
