@@ -9,11 +9,11 @@
 MainMenu::MainMenu(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainMenu)
+
 {
     ui->setupUi(this);
     connect(ui->Play , SIGNAL(released()) , this , SLOT(PressPlay()));
     connect(ui->Exit , SIGNAL(released()) , this , SLOT(PressExit()));
-    server_descriptor = socket(AF_INET, SOCK_STREAM, 0);
 }
 
 MainMenu::~MainMenu()
@@ -25,6 +25,7 @@ MainMenu::~MainMenu()
 void MainMenu::PressPlay()
 {
     sockaddr_in server;
+    server_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     MainWindow *the_game;
      the_game = new MainWindow(this);
     this->hide();

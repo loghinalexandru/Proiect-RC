@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include "mainmenu.h"
 #include "mainwindow.h"
+#define RED_PLAYER  2
+#define YELLOW_PLAYER  3
 
 
 namespace Ui {
@@ -24,6 +26,7 @@ public:
     void set_server(int fd_server);
     void set_other_player_choice(char * move);
     void set_current_player_choice(char * move);
+    void other_player_left();
 
 
     ~MainWindow();
