@@ -1,0 +1,30 @@
+bool check_win_condition(char playing_matrix[MAX_ROW][MAX_COL]) { 
+     for (int i = 0; i < MAX_ROW; ++i) {
+     for (int j = 0; j < MAX_COL; ++j) {
+    char sum_line = 1, sum_col = 1, sum_dig = 1, sum_dig_rev = 1;
+     if (playing_matrix[i][j] != -1) {
+     for (int t = 1; t < 4; ++t) {
+     if (j + t < MAX_COL) {
+          if (playing_matrix[i][j + t] == playing_matrix[i][j])
+                sum_line++; 
+     }
+     if (i + t < MAX_ROW) {
+         if (playing_matrix[i + t][j] == playing_matrix[i][j])
+             sum_col++;
+     }
+     if (i + t < MAX_ROW && j - t > 0) {
+         if (playing_matrix[i + t][j - t] == playing_matrix[i][j])
+              sum_dig++;
+     }
+     if (i + t < MAX_ROW && j + t < MAX_ROW) {
+          if (playing_matrix[i + t][j + t] == playing_matrix[i][j])
+                          sum_dig_rev++;
+     }
+     }
+    if (sum_line >= 4 || sum_col >= 4 || sum_dig >= 4 || sum_dig_rev >= 4) 
+     return true;
+     } //if
+     } //second for
+}/first for
+        return false;
+}//function
