@@ -135,7 +135,7 @@ int main ()
     {
       int fd_player_one;
       int fd_player_two;
-      char set_color = rand() % 80;
+
       thData * td; //parametru functia executata de thread     
       int length_player_one = sizeof(player_one);
       int length_player_two = sizeof(player_two);
@@ -153,10 +153,7 @@ int main ()
 	  continue;
 	}
   else{
-    char first_or_second = set_color % 2;
-    write(fd_player_one , &first_or_second , 1);
-    first_or_second = (set_color + 1) % 2;
-    write(fd_player_one , &first_or_second , 1);
+
       ++number_of_players;
   }
   if ( (fd_player_two = accept (sd, (struct sockaddr *) &player_two, &length_player_two)) < 0)
@@ -165,10 +162,7 @@ int main ()
 	  continue;
 	}
   else{
-   char first_or_second = (set_color + 1) % 2;
-    write(fd_player_two , &first_or_second , 1);
-    first_or_second = set_color % 2;
-    write(fd_player_two , &first_or_second , 1);
+
       ++number_of_players;
   }
   /* s-a realizat conexiunea, se astepta mesajul */
@@ -180,7 +174,6 @@ int main ()
 	td->idThread=i++;
 	td->player_one = fd_player_one;
   td->player_two = fd_player_two;
-  td->first_player_color = set_color % 2;
   if(number_of_players == 2){
     number_of_players = 0;
 	  pthread_create(&th[i], NULL, &treat, td);	   
@@ -189,6 +182,7 @@ int main ()
 };				
 static void *treat(void * arg)
 {		
+    char set_color = rand() % 80;
     char game_matrix[MAX_ROW][MAX_COL];
     char win_condition = 0, random_exit = 0;
     int turn_number = 0;
@@ -196,6 +190,15 @@ static void *treat(void * arg)
 		struct thData* game_info;
     memset(game_matrix , 0 , sizeof(game_matrix));
 		game_info = (struct thData*) arg;
+    char first_or_second = set_color % 2;
+    write(game_info->player_one , &first_or_second , 1);
+    first_or_second = (set_color + 1) % 2;
+    write(game_info->player_one , &first_or_second , 1);
+    first_or_second = (set_color + 1) % 2;
+    write(game_info->player_two , &first_or_second , 1);
+    first_or_second = set_color % 2;
+    write(game_info->player_two , &first_or_second , 1);
+    game_info->first_player_color = set_color % 2;
     while(!win_condition  && !random_exit){
           char a[20];
           fflush(stdout);
