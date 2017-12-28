@@ -27,23 +27,21 @@ public:
     void set_other_player_choice(char * move);
     void set_current_player_choice(char * move);
     void other_player_left();
-
-
+    void wait_turn_gui();
+    void pass_turn_gui();
     ~MainWindow();
 
 
 private slots:
     void BackToMenu();
     void set_disc(bool is_clicked);
-    void click_wrapper();
 
 private:
     Ui::MainWindow *ui;
-    char player_yellow = 0;
-    char player_red = 0;
+    char player_yellow = 2;
+    char player_red = 2;
     char my_turn = 2;
     int server;
-    bool already_clicked = false;
 };
 
 #endif // MAINWINDOW_H

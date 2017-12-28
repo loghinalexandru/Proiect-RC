@@ -1,13 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include <QSplashScreen>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->end_game_box->setStyleSheet("background-color: #FFFFFF;");
+    ui->end_game_box->setStyleSheet("background-color: #FFFFFF; font: 75 italic 30pt 'Noto Sans'; font: 30pt 'Noto Sans';");
     ui->end_game_box->hide();
     make_round_buttons(ui->p1_1);
     make_round_buttons(ui->p2_1);
@@ -52,48 +53,48 @@ MainWindow::MainWindow(QWidget *parent) :
     make_round_buttons(ui->p5_7);
     make_round_buttons(ui->p6_7);
     connect(ui->Back , SIGNAL(clicked(bool)) , this , SLOT(BackToMenu()));
-    connect(ui->p1_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_1 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_2 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_3 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_4 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_5 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_6 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p1_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p2_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p3_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p4_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p5_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
-    connect(ui->p6_7 , SIGNAL(clicked(bool)) , this , SLOT(click_wrapper()));
+    connect(ui->p1_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p1_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p2_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p3_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p4_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p5_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->p6_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
 }
 
 
@@ -113,7 +114,9 @@ void MainWindow::make_round_buttons(QPushButton *p){
 
 void MainWindow::BackToMenu()
 {
-    this->parentWidget()->show();
+    MainMenu * p;
+    p = (MainMenu* )this->parentWidget();
+    p->main_menu_gui();
     this->~MainWindow();
 }
 
@@ -121,10 +124,10 @@ void MainWindow::set_disc(bool is_clicked)
 {
     char set_button[20];
     QPushButton * button_pressed = (QPushButton *)sender();
-    this->hide();
+    wait_turn_gui();
     const char * button_object_name;
     button_object_name = button_pressed->objectName().toStdString().c_str();
-    write(this->server , button_object_name , 20);
+    write(this->server , button_object_name , strlen(button_object_name));
     read(this->server ,set_button , sizeof(set_button));
     this->set_current_player_choice(set_button);
     use_player_turn();
@@ -133,6 +136,7 @@ void MainWindow::set_disc(bool is_clicked)
 
 void MainWindow::set_color()
 {
+
     qDebug() << (int) player_red << ' ' << (int)player_yellow;
     if(player_red == true){
          this->centralWidget()->setStyleSheet("QPushButton:hover {background-color: #FF2400;} QPushButton:disabled {background-color: #FF2400 ;} QPushButton {background-color: #FFFFFF; border: 1px solid black;border-radius: 5px;} ");
@@ -147,23 +151,23 @@ void MainWindow::set_color()
 void MainWindow::use_player_turn()
 {
     char other_player_move[20];
+    QCoreApplication::processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
-    //qDebug() <<"SUNT AICI";
+    qDebug() <<"SUNT AICI";
     if(read(this->server , &my_turn , 1) == -1){
         qDebug() << "O CRAPAT";
         return;
     }
-    this->already_clicked = false;
+    qDebug() << "Am citit";
     qDebug() << (int)this->my_turn;
     if(this->my_turn == 1){
+        pass_turn_gui();
         this->show();
         this->setEnabled(true);
     }
     if(my_turn == 0){
         this->setEnabled(false);
         read(this->server , other_player_move , sizeof(other_player_move));
-        qDebug() << "CRAPA LA READ";
-        qDebug() << other_player_move;
         if(strlen(other_player_move) > 0){
            this->set_other_player_choice(other_player_move);
         }
@@ -182,6 +186,7 @@ void MainWindow::use_player_turn()
             this->ui->gridLayoutWidget_5->hide();
             this->ui->gridLayoutWidget_6->hide();
             this->ui->gridLayoutWidget_7->hide();
+            this->ui->Back->blockSignals(false);
             this->ui->end_game_box->setText("YOU ARE THE WINNER");
             this->ui->end_game_box->show();
     }
@@ -195,6 +200,7 @@ void MainWindow::use_player_turn()
         this->ui->gridLayoutWidget_5->hide();
         this->ui->gridLayoutWidget_6->hide();
         this->ui->gridLayoutWidget_7->hide();
+        this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
     }
@@ -208,6 +214,7 @@ void MainWindow::use_player_turn()
         this->ui->gridLayoutWidget_5->hide();
         this->ui->gridLayoutWidget_6->hide();
         this->ui->gridLayoutWidget_7->hide();
+        this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU ARE THE WINNER");
         this->ui->end_game_box->show();
     }
@@ -221,6 +228,7 @@ void MainWindow::use_player_turn()
         this->ui->gridLayoutWidget_5->hide();
         this->ui->gridLayoutWidget_6->hide();
         this->ui->gridLayoutWidget_7->hide();
+        this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
     }
@@ -229,15 +237,6 @@ void MainWindow::use_player_turn()
 void MainWindow::set_server(int fd_server)
 {
     this->server = fd_server;
-}
-
-void MainWindow::click_wrapper()
-{
-    if(this->already_clicked == false){
-        this->already_clicked = true;
-        set_disc(true);
-    }
-    return;
 }
 
 
@@ -263,4 +262,33 @@ void MainWindow::set_current_player_choice(char * move)
 void other_player_left()
 {
 
+}
+
+void MainWindow::wait_turn_gui()
+{
+    this->ui->gridLayoutWidget->hide();
+    this->ui->gridLayoutWidget_2->hide();
+    this->ui->gridLayoutWidget_3->hide();
+    this->ui->gridLayoutWidget_4->hide();
+    this->ui->gridLayoutWidget_5->hide();
+    this->ui->gridLayoutWidget_6->hide();
+    this->ui->gridLayoutWidget_7->hide();
+    this->ui->end_game_box->setText("WAIT YOUR TURN");
+    this->ui->Back->blockSignals(true);
+    this->ui->end_game_box->show();
+    this->setEnabled(false);
+}
+
+void MainWindow::pass_turn_gui()
+{
+    this->ui->gridLayoutWidget->show();
+    this->ui->gridLayoutWidget_2->show();
+    this->ui->gridLayoutWidget_3->show();
+    this->ui->gridLayoutWidget_4->show();
+    this->ui->gridLayoutWidget_5->show();
+    this->ui->gridLayoutWidget_6->show();
+    this->ui->gridLayoutWidget_7->show();
+    this->ui->Back->blockSignals(false);
+    this->setEnabled(true);
+    this->ui->end_game_box->hide();
 }

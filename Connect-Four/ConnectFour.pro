@@ -14,12 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    mainmenu.cpp
+    mainmenu.cpp \
+
 
 HEADERS  += mainwindow.h \
-    mainmenu.h
+    mainmenu.h \
 
 FORMS    += mainwindow.ui \
-    mainmenu.ui
+    mainmenu.ui \
 
-DESTDIR = ./
+

@@ -12,7 +12,8 @@ MainMenu::MainMenu(QWidget *parent) :
 
 {
     ui->setupUi(this);
-    connect(ui->Play , SIGNAL(released()) , this , SLOT(PressPlay()));
+    this->ui->label->hide();
+    connect(ui->Play , SIGNAL(released()) , this , SLOT(waiting_players_gui()));
     connect(ui->Exit , SIGNAL(released()) , this , SLOT(PressExit()));
 }
 
@@ -24,11 +25,12 @@ MainMenu::~MainMenu()
 
 void MainMenu::PressPlay()
 {
+
     sockaddr_in server;
     server_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     MainWindow *the_game;
-     the_game = new MainWindow(this);
-    this->hide();
+    the_game = new MainWindow(this);
+    the_game->hide();
     if(server_descriptor == - 1){
         qDebug() << "ERROR ON SOCKET CREATION";
         exit(0);
@@ -42,12 +44,12 @@ void MainMenu::PressPlay()
     }
     ::read(server_descriptor , &the_game->player_red , 1);
     ::read(server_descriptor , &the_game->player_yellow , 1);
+    qDebug() << "AM CITIT DE LA SERVER";
+    this->hide();
     the_game->set_server(server_descriptor);
     the_game->set_color();
-    the_game->show();
-    //while(the_game->my_turn != -1){
     the_game->use_player_turn();
-    //}
+
 }
 
 void MainMenu::PressExit()
@@ -58,4 +60,24 @@ void MainMenu::PressExit()
 int MainMenu::get_server_descriptor()
 {
     return this->server_descriptor;
+}
+
+
+void MainMenu::waiting_players_gui()
+{
+    this->ui->Play->hide();
+    this->ui->Exit->hide();
+    this->ui->label->show();
+    qApp->processEvents();
+    this->PressPlay();
+}
+
+
+void MainMenu::main_menu_gui()
+{
+    this->show();
+    this->ui->Play->show();
+    this->ui->Exit->show();
+    this->ui->label->hide();
+    qApp->processEvents();
 }
