@@ -193,14 +193,6 @@ int main ()
 };				
 
 
-char* integer_to_ascii(int p){
-  char t[1];
-  char* x[2][2];
-  *t = p + 48;
-  x[0][0] = t;
-  printf("%s" , x[0][0]);
-
-}
 static void *treat(void * arg)
 {		
 
@@ -209,7 +201,7 @@ static void *treat(void * arg)
     char play_again_player_one = 1, play_again_player_two = 1;
     pthread_detach(pthread_self());
     struct thData * game_info = (struct thData *) arg;
-    integer_to_ascii(9);
+  
     while(play_again_player_one && play_again_player_two){
        printf("\nPLAYING AGAIN\t%i\n" , game_info->idThread);
         if(result = game_function(arg , &player_one_points , &player_two_points) == -1){
@@ -235,8 +227,10 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
    char set_color = rand() % 80;
     char game_matrix[MAX_ROW][MAX_COL];
     char win_condition = 0, random_exit = 0;
-    char turn_number = rand() % 80 ; 
+    char first_player , second_player;
+    char turn_number = rand() % 80 ;
     turn_number = turn_number % 2;
+    char who_is_first = turn_number;
 		struct thData* game_info;
     memset(game_matrix , 0 , sizeof(game_matrix));
 		game_info = (struct thData*) arg;
@@ -249,6 +243,17 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     first_or_second = set_color % 2;
     write(game_info->player_two , &first_or_second , 1);
     game_info->first_player_color = set_color % 2;
+    if(turn_number == 1 && game_info->first_player_color == 0 || (turn_number == 0 && game_info->first_player_color == 1)){
+      first_player = YELLOW_PLAYER;
+      second_player = RED_PLAYER;
+    }
+    if((turn_number == 1 && game_info->first_player_color == 1) || ( turn_number == 0 && game_info->first_player_color == 0)){
+      first_player = RED_PLAYER;
+      second_player = YELLOW_PLAYER;
+    }
+    printf("PRIMU JUCATOR E : %d\n" , (int)first_player);
+    printf("AL DOILEA JUCATOR E : %d\n" , (int)second_player);
+    
     while(!win_condition  && !random_exit && turn_number != 42){
           char a[20];
           fflush(stdout);
@@ -334,15 +339,29 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
       win_condition = PLAYERS_DRAW; 
     }
     printf("\n");
-    printf("%i" ,(int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
+    printf("%i" , (int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
     printf("%i" , (int)write(game_info->player_one , &win_condition , sizeof(win_condition)));
+
     fflush(stdout);
-    if(game_info->first_player_color == 0 && win_condition == RED_PLAYER){
+    if(win_condition == first_player || win_condition == PLAYERS_DRAW){
           ++(*player_one_score);
     }
-    else{
+    if(win_condition == second_player || win_condition == PLAYERS_DRAW){
           ++(*player_two_score);
     } 
+    if(who_is_first == 1){
+          printf("%i" , (int)write(game_info->player_one , player_one_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_one , player_two_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_two , player_two_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_two , player_one_score , sizeof(int)));
+    }
+    else{
+          printf("%i" , (int)write(game_info->player_one , player_two_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_one , player_one_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_two , player_one_score , sizeof(int)));
+          printf("%i" , (int)write(game_info->player_two , player_two_score , sizeof(int)));
+    }
+
     if(random_exit == 1){
       return -1;
     }

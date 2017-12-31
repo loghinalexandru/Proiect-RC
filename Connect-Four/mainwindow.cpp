@@ -8,7 +8,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->You->setText("<font color='white'>You: </font>");
+    ui->You_actuall_number->hide();
+    ui->Opponent->setText("<font color='white'>Opponent: </font>");
+    ui->Opponent_actual_number->hide();
+    ui->You->hide();
+    ui->Opponent->hide();
     ui->turn_number->setText("<font color='white'>TURN NUMBER: </font>");
+    ui->actual_turn_number->setStyleSheet("QLabel { background-color : black; color : white; font: 75 italic 30pt 'Noto Sans'; }");
     ui->end_game_box->setStyleSheet("background-color: #FFFFFF; font: 75 italic 30pt 'Noto Sans'; font: 30pt 'Noto Sans';");
     ui->end_game_box->hide();
     ui->Rematch->hide();
@@ -175,7 +182,7 @@ void MainWindow::use_player_turn()
         qDebug() << "O CRAPAT";
         return;
     }
-    if(my_turn  < 2){
+    if(my_turn < 2){
         if(read(this->server , &turn , 1) == -1){
             qDebug() << "O CRAPAT";
             return;
@@ -183,8 +190,7 @@ void MainWindow::use_player_turn()
         qApp->processEvents();
         this->update_turn_gui();
     }
-
-    qDebug() << (int)this->turn;
+    qDebug() << (int)this->my_turn;
     if(this->my_turn == 1){
         qApp->processEvents();
         pass_turn_gui();
@@ -201,17 +207,19 @@ void MainWindow::use_player_turn()
         qApp->processEvents();
         read(this->server , other_player_move , sizeof(other_player_move));
         if(strlen(other_player_move) > 0){
-           this->set_other_player_choice(other_player_move);
+            this->set_other_player_choice(other_player_move);
             qApp->processEvents();
         }
         else{
             read(this->server , &my_turn , 1);
             qApp->processEvents();
         }
-        qApp->processEvents();
         use_player_turn();
+        return;
+        qApp->processEvents();
+
     }
-    if(my_turn == YELLOW_PLAYER && this->player_yellow == 1){
+    if((my_turn == YELLOW_PLAYER && this->player_yellow == 1 ) || (my_turn == RED_PLAYER && this->player_red == 1)){
             this->show();
             this->setEnabled(true);
             this->ui->gridLayoutWidget->hide();
@@ -225,9 +233,20 @@ void MainWindow::use_player_turn()
             this->ui->end_game_box->setText("YOU ARE THE WINNER");
             this->ui->end_game_box->show();
             this->ui->Rematch->show();
+            qDebug() << "WIN AICI PRIMU IF";
+            read(this->server , &this_player_score , sizeof(int));
+            read(this->server   , &other_player_score , sizeof(int));
+            ui->You->show();
+            ui->You_actuall_number->show();
+            ui->You_actuall_number->setText(QString::number(this_player_score));
+            ui->Opponent->show();
+            ui->Opponent_actual_number->show();
+            ui->Opponent_actual_number->setText(QString::number(other_player_score));
+            qDebug() << this_player_score << ":" << other_player_score;
             qApp->processEvents();
+
     }
-    if(my_turn == YELLOW_PLAYER && this->player_yellow == 0){
+    if((my_turn == YELLOW_PLAYER && this->player_yellow == 0) || (my_turn == RED_PLAYER && this->player_red == 0)){
         this->show();
         this->setEnabled(true);
         this->ui->gridLayoutWidget->hide();
@@ -241,39 +260,17 @@ void MainWindow::use_player_turn()
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
         this->ui->Rematch->show();
-        qApp->processEvents();
-    }
-    if(my_turn == RED_PLAYER && this->player_red == 1){
-        this->show();
-        this->setEnabled(true);
-        this->ui->gridLayoutWidget->hide();
-        this->ui->gridLayoutWidget_2->hide();
-        this->ui->gridLayoutWidget_3->hide();
-        this->ui->gridLayoutWidget_4->hide();
-        this->ui->gridLayoutWidget_5->hide();
-        this->ui->gridLayoutWidget_6->hide();
-        this->ui->gridLayoutWidget_7->hide();
-        this->ui->Back->blockSignals(false);
-        this->ui->end_game_box->setText("YOU ARE THE WINNER");
-        this->ui->end_game_box->show();
-        this->ui->Rematch->show();
-        qApp->processEvents();
-    }
-    if(my_turn == RED_PLAYER && this->player_red == 0){
-        this->show();
-        this->setEnabled(true);
-        this->ui->gridLayoutWidget->hide();
-        this->ui->gridLayoutWidget_2->hide();
-        this->ui->gridLayoutWidget_3->hide();
-        this->ui->gridLayoutWidget_4->hide();
-        this->ui->gridLayoutWidget_5->hide();
-        this->ui->gridLayoutWidget_6->hide();
-        this->ui->gridLayoutWidget_7->hide();
-        this->ui->Back->blockSignals(false);
-        this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
-        this->ui->end_game_box->show();
-        this->ui->Rematch->show();
-        qApp->processEvents();
+        qDebug() << "WIN AICI AL DOILEA IF";
+        read(this->server , &this_player_score , sizeof(int));
+        read(this->server   , &other_player_score , sizeof(int));
+        ui->You->show();
+        ui->You_actuall_number->show();
+        ui->You_actuall_number->setText(QString::number(this_player_score));
+        ui->Opponent->show();
+        ui->Opponent_actual_number->show();
+        ui->Opponent_actual_number->setText(QString::number(other_player_score));
+        qDebug() << this_player_score << ":" << other_player_score;
+
     }
     if(my_turn == PLAYERS_DRAW){
         this->show();
@@ -289,8 +286,13 @@ void MainWindow::use_player_turn()
         this->ui->end_game_box->setText("YOU MANAGED A DRAW");
         this->ui->end_game_box->show();
         this->ui->Rematch->show();
+        qDebug() << "WIN AICI AL TREILEA IF";
+        read(this->server , &this_player_score , sizeof(int));
+        read(this->server   , &other_player_score , sizeof(int));
+        qDebug() << this_player_score << ":" << other_player_score;
         qApp->processEvents();
     }
+
 }
 
 void MainWindow::set_server(int fd_server)

@@ -45,7 +45,7 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>20</x>
       <y>50</y>
       <width>111</width>
       <height>501</height>
@@ -147,9 +147,9 @@
    <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>140</x>
       <y>50</y>
-      <width>101</width>
+      <width>111</width>
       <height>501</height>
      </rect>
     </property>
@@ -327,7 +327,7 @@
    <widget class="QWidget" name="gridLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>390</x>
       <y>50</y>
       <width>111</width>
       <height>501</height>
@@ -417,13 +417,26 @@
    <widget class="QWidget" name="gridLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>520</x>
       <y>50</y>
-      <width>111</width>
+      <width>121</width>
       <height>501</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
+     <item row="5" column="0">
+      <widget class="QPushButton" name="p6_5">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QPushButton" name="p4_5">
        <property name="text">
@@ -489,27 +502,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
-      <widget class="QPushButton" name="p6_5">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_6">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>650</x>
       <y>50</y>
-      <width>101</width>
+      <width>111</width>
       <height>501</height>
      </rect>
     </property>
@@ -597,7 +597,7 @@
    <widget class="QWidget" name="gridLayoutWidget_7">
     <property name="geometry">
      <rect>
-      <x>770</x>
+      <x>780</x>
       <y>50</y>
       <width>111</width>
       <height>501</height>
@@ -694,12 +694,15 @@
     </layout>
    </widget>
    <widget class="QLabel" name="end_game_box">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>50</y>
-      <width>871</width>
-      <height>521</height>
+      <x>20</x>
+      <y>10</y>
+      <width>881</width>
+      <height>571</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -765,6 +768,64 @@ font: 72pt &quot;Noto Sans&quot;;</string>
       <y>50</y>
       <width>111</width>
       <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="You">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>10</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="You_actuall_number">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>10</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Opponent">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>10</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Opponent_actual_number">
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>20</y>
+      <width>41</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">

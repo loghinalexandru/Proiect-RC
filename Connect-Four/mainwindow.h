@@ -45,14 +45,14 @@ public slots:
     void set_disc(bool is_clicked);
     void use_player_turn();
 
-
-
 private:
     Ui::MainWindow *ui;
     char my_turn = 2;
     int server;
     char player_yellow = 2;
     char player_red = 2;
+    int this_player_score = 0;
+    int other_player_score = 0;
     char turn = 0;
 };
 

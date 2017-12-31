@@ -24,10 +24,8 @@ void MyThread::run()
    MainMenu * p = (MainMenu *) parent->parent();
    p->hide();
    qApp->processEvents();
-   //make_game_thread();
    emit work_done();
    qApp->processEvents();
-   //his->terminate();
 }
 
 
