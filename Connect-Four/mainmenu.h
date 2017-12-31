@@ -15,6 +15,8 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include "mythread.h"
+#include "mainwindow.h"
 
 namespace Ui {
 class MainMenu;
@@ -28,18 +30,19 @@ public:
     friend class MainWindow;
     int get_server_descriptor();
     void main_menu_gui();
+    void play_again();
     ~MainMenu();
 
 public slots:
     void PressPlay();
     void PressExit();
     void waiting_players_gui();
-
-
+    void make_thread();
 
 private:
     Ui::MainMenu *ui;
     int server_descriptor;
+    class MainWindow *the_game;
 };
 
 #endif // MAINMENU_H

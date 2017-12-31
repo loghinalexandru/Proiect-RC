@@ -30,7 +30,7 @@
     <property name="geometry">
      <rect>
       <x>970</x>
-      <y>90</y>
+      <y>130</y>
       <width>201</width>
       <height>191</height>
      </rect>
@@ -717,6 +717,58 @@ font: 72pt &quot;Noto Sans&quot;;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Rematch">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>380</y>
+      <width>201</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Rematch</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="turn_number">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>50</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;Noto Sans&quot;;
+</string>
+    </property>
+    <property name="text">
+     <string>TURN NUMBER :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="actual_turn_number">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>50</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

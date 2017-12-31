@@ -26,7 +26,7 @@
 #define YELLOW_PLAYER  3
 #define MAX_ROW 7 
 #define MAX_COL 8
-#define PLAYER_WIN 5
+#define PLAYERS_DRAW 5
 
 /* codul de eroare returnat de anumite apeluri */
 extern int errno;
@@ -41,6 +41,13 @@ typedef struct thData{
 
 
 static void *treat(void *); /* functia executata de fiecare thread ce realizeaza comunicarea cu clientii */
+
+int game_function();
+
+int check_file_descriptor(int file_descriptor)
+{
+  return fcntl(file_descriptor , F_GETFD) == -1 || errno == EBADF;
+}
 
 
 int check_win_condition(char playing_matrix[MAX_ROW][MAX_COL]) { 
@@ -170,23 +177,66 @@ int main ()
 	int idThread; //id-ul threadului
 	int cl; //descriptorul intors de accept
 
-	td=(struct thData*)malloc(sizeof(struct thData));	
-	td->idThread=i++;
-	td->player_one = fd_player_one;
-  td->player_two = fd_player_two;
+
   if(number_of_players == 2){
+    printf("%i\n" , check_file_descriptor(fd_player_one));
+    printf("%i\n" , check_file_descriptor(fd_player_two));
+    fflush(stdout);
+    td=(struct thData*)malloc(sizeof(struct thData));	
+	  td->idThread=i++;
+	  td->player_one = fd_player_one;
+    td->player_two = fd_player_two;
     number_of_players = 0;
 	  pthread_create(&th[i], NULL, &treat, td);	   
   }	
 	}//while    
 };				
+
+
+char* integer_to_ascii(int p){
+  char t[1];
+  char* x[2][2];
+  *t = p + 48;
+  x[0][0] = t;
+  printf("%s" , x[0][0]);
+
+}
 static void *treat(void * arg)
 {		
-    char set_color = rand() % 80;
+
+    int player_one_points = 0, player_two_points = 0;
+    int result;
+    char play_again_player_one = 1, play_again_player_two = 1;
+    pthread_detach(pthread_self());
+    struct thData * game_info = (struct thData *) arg;
+    integer_to_ascii(9);
+    while(play_again_player_one && play_again_player_two){
+       printf("\nPLAYING AGAIN\t%i\n" , game_info->idThread);
+        if(result = game_function(arg , &player_one_points , &player_two_points) == -1){
+            break;
+        }
+        read(game_info->player_one , &play_again_player_one , 1);
+        printf("PRIMU JOACA DIN NOU CU : %i" , player_one_points);
+        read(game_info->player_two , &play_again_player_two , 1);   
+        printf("AL DOILEA JOACA DIN NOU CU : %i" , player_two_points);
+           
+    }
+    close(game_info->player_one);
+    close(game_info->player_two);
+    return(NULL);
+   
+  		
+};
+
+
+
+int game_function(void * arg , int * player_one_score , int * player_two_score)
+{
+   char set_color = rand() % 80;
     char game_matrix[MAX_ROW][MAX_COL];
     char win_condition = 0, random_exit = 0;
-    int turn_number = 0;
-   
+    char turn_number = rand() % 80 ; 
+    turn_number = turn_number % 2;
 		struct thData* game_info;
     memset(game_matrix , 0 , sizeof(game_matrix));
 		game_info = (struct thData*) arg;
@@ -199,7 +249,7 @@ static void *treat(void * arg)
     first_or_second = set_color % 2;
     write(game_info->player_two , &first_or_second , 1);
     game_info->first_player_color = set_color % 2;
-    while(!win_condition  && !random_exit){
+    while(!win_condition  && !random_exit && turn_number != 42){
           char a[20];
           fflush(stdout);
           char player_turn = turn_number % 2;
@@ -214,6 +264,7 @@ static void *treat(void * arg)
             }
             break;
           }
+          write(game_info->player_one , &turn_number , 1);
           player_turn = (turn_number + 1) % 2;
           if(write(game_info->player_two , &player_turn , 1) == -1){
             random_exit = 1;
@@ -225,6 +276,7 @@ static void *treat(void * arg)
             }
             break;
           }
+          write(game_info->player_two , &turn_number , 1);
           if(turn_number % 2 == 1){
               read(game_info->player_one , a , sizeof(a));
               int i;
@@ -235,7 +287,7 @@ static void *treat(void * arg)
                   if(game_matrix[i+1][y] == 0){
                     ++x;
                   }
-                  else
+                  else  
                     break;
               }
               if(game_info->first_player_color == 0){
@@ -274,18 +326,24 @@ static void *treat(void * arg)
               win_condition = check_win_condition(game_matrix);
               printf("\nWIN CONDITION : %i" , win_condition);
               write(game_info->player_two , a , sizeof(a)); 
-              write(game_info->player_one , a , sizeof(a));
-         
-                   
+              write(game_info->player_one , a , sizeof(a));          
           }
           ++turn_number;
+    }
+    if(turn_number == 42){
+      win_condition = PLAYERS_DRAW; 
     }
     printf("\n");
     printf("%i" ,(int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
     printf("%i" , (int)write(game_info->player_one , &win_condition , sizeof(win_condition)));
     fflush(stdout);
-    close(game_info->player_one);
-    close(game_info->player_two);
-		return(NULL);	
-  		
-};
+    if(game_info->first_player_color == 0 && win_condition == RED_PLAYER){
+          ++(*player_one_score);
+    }
+    else{
+          ++(*player_two_score);
+    } 
+    if(random_exit == 1){
+      return -1;
+    }
+}

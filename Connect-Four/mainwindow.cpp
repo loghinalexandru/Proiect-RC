@@ -4,12 +4,14 @@
 #include <QSplashScreen>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent) ,
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->turn_number->setText("<font color='white'>TURN NUMBER: </font>");
     ui->end_game_box->setStyleSheet("background-color: #FFFFFF; font: 75 italic 30pt 'Noto Sans'; font: 30pt 'Noto Sans';");
     ui->end_game_box->hide();
+    ui->Rematch->hide();
     make_round_buttons(ui->p1_1);
     make_round_buttons(ui->p2_1);
     make_round_buttons(ui->p3_1);
@@ -53,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     make_round_buttons(ui->p5_7);
     make_round_buttons(ui->p6_7);
     connect(ui->Back , SIGNAL(clicked(bool)) , this , SLOT(BackToMenu()));
+    connect(ui->Rematch , SIGNAL(clicked(bool)) , this , SLOT(Rematch()));
     connect(ui->p1_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
     connect(ui->p2_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
     connect(ui->p3_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
@@ -101,7 +104,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    ::close(server);
 }
 
 void MainWindow::make_round_buttons(QPushButton *p){
@@ -115,9 +117,21 @@ void MainWindow::make_round_buttons(QPushButton *p){
 void MainWindow::BackToMenu()
 {
     MainMenu * p;
+    char player_rematch = 0;
+    write(this->server , &player_rematch , 1);
     p = (MainMenu* )this->parentWidget();
     p->main_menu_gui();
     this->~MainWindow();
+}
+
+void MainWindow::Rematch()
+{
+    MainMenu *p;
+    char player_rematch = 1;
+    write(this->server , &player_rematch , 1);
+    this->hide();
+    p = (MainMenu* )this->parentWidget();
+    p->play_again();
 }
 
 void MainWindow::set_disc(bool is_clicked)
@@ -125,13 +139,15 @@ void MainWindow::set_disc(bool is_clicked)
     char set_button[20];
     QPushButton * button_pressed = (QPushButton *)sender();
     wait_turn_gui();
+    qApp->processEvents();
     const char * button_object_name;
     button_object_name = button_pressed->objectName().toStdString().c_str();
     write(this->server , button_object_name , strlen(button_object_name));
     read(this->server ,set_button , sizeof(set_button));
     this->set_current_player_choice(set_button);
+    qApp->processEvents();
     use_player_turn();
-
+    //MainGameThread::run();
 }
 
 void MainWindow::set_color()
@@ -148,32 +164,51 @@ void MainWindow::set_color()
     }
 }
 
+
 void MainWindow::use_player_turn()
 {
     char other_player_move[20];
-    QCoreApplication::processEvents();
+    qApp->processEvents();
+    qApp->processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
-    qDebug() <<"SUNT AICI";
     if(read(this->server , &my_turn , 1) == -1){
         qDebug() << "O CRAPAT";
         return;
     }
-    qDebug() << "Am citit";
-    qDebug() << (int)this->my_turn;
+    if(my_turn  < 2){
+        if(read(this->server , &turn , 1) == -1){
+            qDebug() << "O CRAPAT";
+            return;
+        }
+        qApp->processEvents();
+        this->update_turn_gui();
+    }
+
+    qDebug() << (int)this->turn;
     if(this->my_turn == 1){
+        qApp->processEvents();
         pass_turn_gui();
         this->show();
         this->setEnabled(true);
+        qApp->processEvents();
     }
     if(my_turn == 0){
+        qApp->processEvents();
         this->setEnabled(false);
+        this->show();
+        qApp->processEvents();
+        wait_turn_gui();
+        qApp->processEvents();
         read(this->server , other_player_move , sizeof(other_player_move));
         if(strlen(other_player_move) > 0){
            this->set_other_player_choice(other_player_move);
+            qApp->processEvents();
         }
         else{
             read(this->server , &my_turn , 1);
+            qApp->processEvents();
         }
+        qApp->processEvents();
         use_player_turn();
     }
     if(my_turn == YELLOW_PLAYER && this->player_yellow == 1){
@@ -189,6 +224,8 @@ void MainWindow::use_player_turn()
             this->ui->Back->blockSignals(false);
             this->ui->end_game_box->setText("YOU ARE THE WINNER");
             this->ui->end_game_box->show();
+            this->ui->Rematch->show();
+            qApp->processEvents();
     }
     if(my_turn == YELLOW_PLAYER && this->player_yellow == 0){
         this->show();
@@ -203,6 +240,8 @@ void MainWindow::use_player_turn()
         this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
+        this->ui->Rematch->show();
+        qApp->processEvents();
     }
     if(my_turn == RED_PLAYER && this->player_red == 1){
         this->show();
@@ -217,6 +256,8 @@ void MainWindow::use_player_turn()
         this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU ARE THE WINNER");
         this->ui->end_game_box->show();
+        this->ui->Rematch->show();
+        qApp->processEvents();
     }
     if(my_turn == RED_PLAYER && this->player_red == 0){
         this->show();
@@ -231,14 +272,32 @@ void MainWindow::use_player_turn()
         this->ui->Back->blockSignals(false);
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
+        this->ui->Rematch->show();
+        qApp->processEvents();
+    }
+    if(my_turn == PLAYERS_DRAW){
+        this->show();
+        this->setEnabled(true);
+        this->ui->gridLayoutWidget->hide();
+        this->ui->gridLayoutWidget_2->hide();
+        this->ui->gridLayoutWidget_3->hide();
+        this->ui->gridLayoutWidget_4->hide();
+        this->ui->gridLayoutWidget_5->hide();
+        this->ui->gridLayoutWidget_6->hide();
+        this->ui->gridLayoutWidget_7->hide();
+        this->ui->Back->blockSignals(false);
+        this->ui->end_game_box->setText("YOU MANAGED A DRAW");
+        this->ui->end_game_box->show();
+        this->ui->Rematch->show();
+        qApp->processEvents();
     }
 }
 
 void MainWindow::set_server(int fd_server)
 {
+    qApp->processEvents();
     this->server = fd_server;
 }
-
 
 void MainWindow::set_other_player_choice(char * move)
 {
@@ -266,6 +325,7 @@ void other_player_left()
 
 void MainWindow::wait_turn_gui()
 {
+    QCoreApplication::processEvents();
     this->ui->gridLayoutWidget->hide();
     this->ui->gridLayoutWidget_2->hide();
     this->ui->gridLayoutWidget_3->hide();
@@ -277,10 +337,12 @@ void MainWindow::wait_turn_gui()
     this->ui->Back->blockSignals(true);
     this->ui->end_game_box->show();
     this->setEnabled(false);
+    QCoreApplication::processEvents();
 }
 
 void MainWindow::pass_turn_gui()
 {
+    QCoreApplication::processEvents();
     this->ui->gridLayoutWidget->show();
     this->ui->gridLayoutWidget_2->show();
     this->ui->gridLayoutWidget_3->show();
@@ -291,4 +353,12 @@ void MainWindow::pass_turn_gui()
     this->ui->Back->blockSignals(false);
     this->setEnabled(true);
     this->ui->end_game_box->hide();
+    QCoreApplication::processEvents();
 }
+
+void MainWindow::update_turn_gui(){
+    QCoreApplication::processEvents();
+    ui->actual_turn_number->setText(QString::number(turn));
+    QCoreApplication::processEvents();
+}
+
