@@ -8,9 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
+    this->setWindowTitle("PLAYER 2");
     ui->You->setText("<font color='white'>You: </font>");
     ui->You_actuall_number->hide();
+    ui->You_actuall_number->setStyleSheet("QLabel { background-color : black; color : white;}");
     ui->Opponent->setText("<font color='white'>Opponent: </font>");
+    ui->Opponent_actual_number->setStyleSheet("QLabel { background-color : black; color : white;}");
     ui->Opponent_actual_number->hide();
     ui->You->hide();
     ui->Opponent->hide();
@@ -127,6 +131,8 @@ void MainWindow::BackToMenu()
     char player_rematch = 0;
     write(this->server , &player_rematch , 1);
     p = (MainMenu* )this->parentWidget();
+    ::close(p->server_descriptor);
+    ::close(this->server);
     p->main_menu_gui();
     this->~MainWindow();
 }
@@ -139,6 +145,7 @@ void MainWindow::Rematch()
     this->hide();
     p = (MainMenu* )this->parentWidget();
     p->play_again();
+
 }
 
 void MainWindow::set_disc(bool is_clicked)
@@ -175,6 +182,7 @@ void MainWindow::set_color()
 void MainWindow::use_player_turn()
 {
     char other_player_move[20];
+    QCoreApplication::processEvents();
     qApp->processEvents();
     qApp->processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
@@ -182,6 +190,7 @@ void MainWindow::use_player_turn()
         qDebug() << "O CRAPAT";
         return;
     }
+     qDebug() << (int)this->my_turn;
     if(my_turn < 2){
         if(read(this->server , &turn , 1) == -1){
             qDebug() << "O CRAPAT";
@@ -190,7 +199,7 @@ void MainWindow::use_player_turn()
         qApp->processEvents();
         this->update_turn_gui();
     }
-    qDebug() << (int)this->my_turn;
+    qDebug() << (int) this->turn;
     if(this->my_turn == 1){
         qApp->processEvents();
         pass_turn_gui();
@@ -202,9 +211,10 @@ void MainWindow::use_player_turn()
         qApp->processEvents();
         this->setEnabled(false);
         this->show();
-        qApp->processEvents();
         wait_turn_gui();
+        manual_event_loop();
         qApp->processEvents();
+        qDebug() << "ASTEPT SA IES DIN EVENT LOOP";
         read(this->server , other_player_move , sizeof(other_player_move));
         if(strlen(other_player_move) > 0){
             this->set_other_player_choice(other_player_move);
@@ -214,6 +224,7 @@ void MainWindow::use_player_turn()
             read(this->server , &my_turn , 1);
             qApp->processEvents();
         }
+        qApp->processEvents();
         use_player_turn();
         return;
         qApp->processEvents();
@@ -286,8 +297,9 @@ void MainWindow::use_player_turn()
         this->ui->end_game_box->setText("YOU MANAGED A DRAW");
         this->ui->end_game_box->show();
         this->ui->Rematch->show();
+        qApp->processEvents();
         qDebug() << "WIN AICI AL TREILEA IF";
-        read(this->server , &this_player_score , sizeof(int));
+        read(this->server ,   &this_player_score ,  sizeof(int));
         read(this->server   , &other_player_score , sizeof(int));
         qDebug() << this_player_score << ":" << other_player_score;
         qApp->processEvents();
@@ -320,10 +332,6 @@ void MainWindow::set_current_player_choice(char * move)
     button->setEnabled(false);
 }
 
-void other_player_left()
-{
-
-}
 
 void MainWindow::wait_turn_gui()
 {
@@ -362,5 +370,26 @@ void MainWindow::update_turn_gui(){
     QCoreApplication::processEvents();
     ui->actual_turn_number->setText(QString::number(turn));
     QCoreApplication::processEvents();
+}
+
+
+void MainWindow::manual_event_loop()
+{
+    int exit_value = 0;
+    fd_set readfds;
+    struct timeval waiting_time;
+    while(exit_value == 0){
+    FD_ZERO(&readfds);
+    FD_SET(this->server , &readfds);
+    waiting_time.tv_sec = 0;
+    waiting_time.tv_usec = 10000;
+    exit_value = select(this->server + 1 , &readfds , NULL , NULL  , &waiting_time);
+     if(exit_value == -1){
+        qDebug() << "FAILED";
+        return;
+     }
+     qDebug() << "ASTEPT" << ':' << exit_value;
+     qApp->processEvents();
+    }
 }
 

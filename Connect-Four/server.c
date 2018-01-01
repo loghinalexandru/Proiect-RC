@@ -51,12 +51,6 @@ int check_file_descriptor(int file_descriptor)
 
 
 int check_win_condition(char playing_matrix[MAX_ROW][MAX_COL]) { 
-     for(int i = 0 ; i < MAX_ROW ; ++i){
-       for(int j = 0 ; j < MAX_COL; ++j){
-         printf("%i" , (int) playing_matrix[i][j]);
-       }
-       printf("\n");
-     }
      for (int i = 1; i < MAX_ROW; ++i) {
      for (int j = 1; j < MAX_COL; ++j) {
      char sum_line = 1, sum_col = 1, sum_dig = 1, sum_dig_rev = 1;
@@ -82,8 +76,7 @@ int check_win_condition(char playing_matrix[MAX_ROW][MAX_COL]) {
       if (sum_line >= 4 || sum_col >= 4 || sum_dig >= 4 || sum_dig_rev >= 4) 
               return playing_matrix[i][j];
      }
-     }
-      
+     }     
 }
         return 0;
 }
@@ -209,8 +202,11 @@ static void *treat(void * arg)
         }
         read(game_info->player_one , &play_again_player_one , 1);
         printf("PRIMU JOACA DIN NOU CU : %i" , player_one_points);
+        fflush(stdout);
         read(game_info->player_two , &play_again_player_two , 1);   
         printf("AL DOILEA JOACA DIN NOU CU : %i" , player_two_points);
+        fflush(stdout);
+        
            
     }
     close(game_info->player_one);
@@ -260,6 +256,8 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
           char player_turn = turn_number % 2;
           memset(a , 0 , sizeof(a));
           if(write(game_info->player_one , &player_turn , 1) == -1){
+            printf("SA DECONECTAT JUCATORUL 1");
+            fflush(stdout);
             random_exit = 1;
             if(game_info->first_player_color != 0){
                 win_condition = YELLOW_PLAYER;
@@ -272,6 +270,8 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
           write(game_info->player_one , &turn_number , 1);
           player_turn = (turn_number + 1) % 2;
           if(write(game_info->player_two , &player_turn , 1) == -1){
+            printf("SA DECONECTAT JUCATORUL 2");
+            fflush(stdout);
             random_exit = 1;
             if(game_info->first_player_color == 0){
                 win_condition = YELLOW_PLAYER;
@@ -336,12 +336,14 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
           ++turn_number;
     }
     if(turn_number == 42){
+      printf("NUMARUL TUREI %i" , turn_number );
+      fflush(stdout);
       win_condition = PLAYERS_DRAW; 
     }
+    fflush(stdout);
     printf("\n");
     printf("%i" , (int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
     printf("%i" , (int)write(game_info->player_one , &win_condition , sizeof(win_condition)));
-
     fflush(stdout);
     if(win_condition == first_player || win_condition == PLAYERS_DRAW){
           ++(*player_one_score);

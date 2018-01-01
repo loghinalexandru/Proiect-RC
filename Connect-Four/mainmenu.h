@@ -15,7 +15,6 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include <fcntl.h>
-#include "mythread.h"
 #include "mainwindow.h"
 
 namespace Ui {
@@ -28,6 +27,7 @@ class MainMenu : public QMainWindow
 public:
     explicit MainMenu(QWidget *parent = 0);
     friend class MainWindow;
+    friend class MyThread;
     int get_server_descriptor();
     void main_menu_gui();
     void play_again();
@@ -37,7 +37,6 @@ public slots:
     void PressPlay();
     void PressExit();
     void waiting_players_gui();
-    void make_thread();
 
 private:
     Ui::MainMenu *ui;

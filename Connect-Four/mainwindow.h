@@ -8,7 +8,6 @@
 #include <string>
 #include "mainmenu.h"
 #include "mainwindow.h"
-#include "mythread.h"
 #define RED_PLAYER  2
 #define YELLOW_PLAYER  3
 #define PLAYERS_DRAW 5
@@ -27,7 +26,6 @@ public:
     friend class MainMenu;
     friend class MyThread;
     void make_round_buttons(QPushButton * p);
-    void set_color();
     void set_server(int fd_server);
     void set_other_player_choice(char * move);
     void set_current_player_choice(char * move);
@@ -35,6 +33,7 @@ public:
     void wait_turn_gui();
     void pass_turn_gui();
     void update_turn_gui();
+    void manual_event_loop();
     ~MainWindow();
 
 
@@ -44,6 +43,7 @@ public slots:
     void Rematch();
     void set_disc(bool is_clicked);
     void use_player_turn();
+    void set_color();
 
 private:
     Ui::MainWindow *ui;
@@ -54,6 +54,7 @@ private:
     int this_player_score = 0;
     int other_player_score = 0;
     char turn = 0;
+    char action_made = 0;
 };
 
 #endif // MAINWINDOW_H

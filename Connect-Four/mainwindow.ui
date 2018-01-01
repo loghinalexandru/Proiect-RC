@@ -822,14 +822,17 @@ font: 72pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="Opponent_actual_number">
     <property name="geometry">
      <rect>
-      <x>1160</x>
-      <y>20</y>
-      <width>41</width>
-      <height>20</height>
+      <x>1150</x>
+      <y>10</y>
+      <width>61</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

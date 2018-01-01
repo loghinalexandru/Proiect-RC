@@ -14,7 +14,6 @@ MainMenu::MainMenu(QWidget *parent) :
     ui->setupUi(this);
     this->ui->label->hide();
     connect(ui->Play , SIGNAL(released()) , this , SLOT(waiting_players_gui()));
-    connect(ui->Play , SIGNAL(released()) , this, SLOT(make_thread()));
     connect(ui->Exit , SIGNAL(released()) , this , SLOT(PressExit()));
 }
 
@@ -22,6 +21,7 @@ MainMenu::~MainMenu()
 {
     delete ui;
     ::close(this->server_descriptor);
+    delete(the_game);
 }
 
 void MainMenu::PressPlay()
@@ -43,10 +43,12 @@ void MainMenu::PressPlay()
     the_game = new class MainWindow(this);
     the_game->wait_turn_gui();
     the_game->set_server(server_descriptor);
-    qDebug() << "RULEZ IN ALT THREAD";
-    //this->hide();
-    //the_game->set_color();
-    //the_game->use_player_turn();
+    the_game->manual_event_loop();
+    ::read(the_game->server , &the_game->player_red , 1);
+    ::read(the_game->server , &the_game->player_yellow , 1);
+    this->hide();
+    the_game->set_color();
+    the_game->use_player_turn();
 
 }
 
@@ -80,20 +82,18 @@ void MainMenu::main_menu_gui()
     qApp->processEvents();
 }
 
-void MainMenu::make_thread()
-{
-    QCoreApplication::processEvents();
-    MyThread* wait_on_read = new MyThread(the_game);
-    wait_on_read->start();
-}
-
 
 void MainMenu::play_again()
 {
-
-    this->the_game->~MainWindow();
-    this->the_game = new MainWindow(this);
+    the_game = new class MainWindow(this);
+    the_game->wait_turn_gui();
     the_game->set_server(server_descriptor);
+    ::read(the_game->server , &the_game->player_red , 1);
+    ::read(the_game->server , &the_game->player_yellow , 1);
+    this->hide();
+    the_game->set_color();
+    the_game->use_player_turn();
     qApp->processEvents();
-    make_thread();
+    //make_thread();
+
 }
