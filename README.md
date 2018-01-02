@@ -1,4 +1,4 @@
 # Proiect-RC
-##Issues
-*Resolve score count on rematch
-*Resolve server dissconect issue
+## Issues
+* Resolve score count on rematch
+* Resolve server dissconect issue
