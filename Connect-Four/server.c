@@ -201,13 +201,14 @@ static void *treat(void * arg)
             break;
         }
         read(game_info->player_one , &play_again_player_one , 1);
-        printf("PRIMU JOACA DIN NOU CU : %i" , player_one_points);
+        printf("PRIMU JOACA DIN NOU CU : %i" , play_again_player_one);
         fflush(stdout);
         read(game_info->player_two , &play_again_player_two , 1);   
-        printf("AL DOILEA JOACA DIN NOU CU : %i" , player_two_points);
+        printf("AL DOILEA JOACA DIN NOU CU : %i" , play_again_player_two);
         fflush(stdout);
-        
-           
+        char result = play_again_player_one & play_again_player_two;
+        write(game_info->player_one , &result , 1);
+        write(game_info->player_two , &result , 1);     
     }
     close(game_info->player_one);
     close(game_info->player_two);
@@ -249,7 +250,6 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     }
     printf("PRIMU JUCATOR E : %d\n" , (int)first_player);
     printf("AL DOILEA JUCATOR E : %d\n" , (int)second_player);
-    
     while(!win_condition  && !random_exit && turn_number != 42){
           char a[20];
           fflush(stdout);
@@ -267,7 +267,6 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
             }
             break;
           }
-          write(game_info->player_one , &turn_number , 1);
           player_turn = (turn_number + 1) % 2;
           if(write(game_info->player_two , &player_turn , 1) == -1){
             printf("SA DECONECTAT JUCATORUL 2");
@@ -281,9 +280,10 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
             }
             break;
           }
-          write(game_info->player_two , &turn_number , 1);
           if(turn_number % 2 == 1){
+              printf("TURA JUCATORULUI UNU\n");
               read(game_info->player_one , a , sizeof(a));
+              fflush(stdout);
               int i;
               int x = -1 , y =  -1;
               x = a[1] - 48;
@@ -303,12 +303,13 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               } 
               a[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              printf("\nWIN CONDITION : %i" , win_condition);  
               write(game_info->player_two , a , sizeof(a));
               write(game_info->player_one , a , sizeof(a));
           }
           else{
+              printf("TURA JUCATORULUI DOI\n");
               read(game_info->player_two , a , sizeof(a));
+              fflush(stdout);
               int i;
               int x = -1 , y = -1;
               x = a[1] - 48;
@@ -329,7 +330,6 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               }   
               a[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              printf("\nWIN CONDITION : %i" , win_condition);
               write(game_info->player_two , a , sizeof(a)); 
               write(game_info->player_one , a , sizeof(a));          
           }

@@ -741,44 +741,11 @@ font: 72pt &quot;Noto Sans&quot;;</string>
      <string>Rematch</string>
     </property>
    </widget>
-   <widget class="QLabel" name="turn_number">
-    <property name="geometry">
-     <rect>
-      <x>930</x>
-      <y>50</y>
-      <width>111</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 10pt &quot;Noto Sans&quot;;
-</string>
-    </property>
-    <property name="text">
-     <string>TURN NUMBER :</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="actual_turn_number">
-    <property name="geometry">
-     <rect>
-      <x>1080</x>
-      <y>50</y>
-      <width>111</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="You">
     <property name="geometry">
      <rect>
       <x>920</x>
-      <y>10</y>
+      <y>60</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -794,7 +761,7 @@ font: 72pt &quot;Noto Sans&quot;;</string>
     <property name="geometry">
      <rect>
       <x>1000</x>
-      <y>10</y>
+      <y>60</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -807,7 +774,7 @@ font: 72pt &quot;Noto Sans&quot;;</string>
     <property name="geometry">
      <rect>
       <x>1080</x>
-      <y>10</y>
+      <y>60</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -823,7 +790,7 @@ font: 72pt &quot;Noto Sans&quot;;</string>
     <property name="geometry">
      <rect>
       <x>1150</x>
-      <y>10</y>
+      <y>60</y>
       <width>61</width>
       <height>21</height>
      </rect>

@@ -24,7 +24,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget * parent = 0);
     friend class MainMenu;
-    friend class MyThread;
     void make_round_buttons(QPushButton * p);
     void set_server(int fd_server);
     void set_other_player_choice(char * move);
@@ -32,8 +31,9 @@ public:
     void other_player_left();
     void wait_turn_gui();
     void pass_turn_gui();
-    void update_turn_gui();
     void manual_event_loop();
+    void player_left_gui();
+    void closeEvent(QCloseEvent * bar);
     ~MainWindow();
 
 

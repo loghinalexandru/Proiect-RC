@@ -27,7 +27,6 @@ class MainMenu : public QMainWindow
 public:
     explicit MainMenu(QWidget *parent = 0);
     friend class MainWindow;
-    friend class MyThread;
     int get_server_descriptor();
     void main_menu_gui();
     void play_again();

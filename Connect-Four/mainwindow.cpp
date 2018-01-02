@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QSplashScreen>
+#include "ui_mainmenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent) ,
@@ -18,8 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->Opponent_actual_number->hide();
     ui->You->hide();
     ui->Opponent->hide();
-    ui->turn_number->setText("<font color='white'>TURN NUMBER: </font>");
-    ui->actual_turn_number->setStyleSheet("QLabel { background-color : black; color : white; font: 75 italic 30pt 'Noto Sans'; }");
     ui->end_game_box->setStyleSheet("background-color: #FFFFFF; font: 75 italic 30pt 'Noto Sans'; font: 30pt 'Noto Sans';");
     ui->end_game_box->hide();
     ui->Rematch->hide();
@@ -139,13 +138,21 @@ void MainWindow::BackToMenu()
 
 void MainWindow::Rematch()
 {
-    MainMenu *p;
+    MainMenu *p = (MainMenu* )this->parentWidget();
+    this->ui->Back->setEnabled(false);
+    this->ui->Rematch->setEnabled(false);
     char player_rematch = 1;
     write(this->server , &player_rematch , 1);
+    manual_event_loop();
+    read(this->server , &player_rematch , 1);
     this->hide();
-    p = (MainMenu* )this->parentWidget();
-    p->play_again();
+    if(player_rematch == 1){
 
+        p->play_again();
+    }
+    else{
+        BackToMenu();
+    }
 }
 
 void MainWindow::set_disc(bool is_clicked)
@@ -157,11 +164,11 @@ void MainWindow::set_disc(bool is_clicked)
     const char * button_object_name;
     button_object_name = button_pressed->objectName().toStdString().c_str();
     write(this->server , button_object_name , strlen(button_object_name));
+    qDebug() << "Am trecut de write";
     read(this->server ,set_button , sizeof(set_button));
     this->set_current_player_choice(set_button);
     qApp->processEvents();
     use_player_turn();
-    //MainGameThread::run();
 }
 
 void MainWindow::set_color()
@@ -183,23 +190,12 @@ void MainWindow::use_player_turn()
 {
     char other_player_move[20];
     QCoreApplication::processEvents();
-    qApp->processEvents();
-    qApp->processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
     if(read(this->server , &my_turn , 1) == -1){
         qDebug() << "O CRAPAT";
         return;
     }
-     qDebug() << (int)this->my_turn;
-    if(my_turn < 2){
-        if(read(this->server , &turn , 1) == -1){
-            qDebug() << "O CRAPAT";
-            return;
-        }
-        qApp->processEvents();
-        this->update_turn_gui();
-    }
-    qDebug() << (int) this->turn;
+    qDebug() << "GO ? : " << (int)my_turn;
     if(this->my_turn == 1){
         qApp->processEvents();
         pass_turn_gui();
@@ -216,19 +212,20 @@ void MainWindow::use_player_turn()
         qApp->processEvents();
         qDebug() << "ASTEPT SA IES DIN EVENT LOOP";
         read(this->server , other_player_move , sizeof(other_player_move));
+        qDebug() << "AM IESIT DIN LOOP SI AM CITIT" << other_player_move;
         if(strlen(other_player_move) > 0){
             this->set_other_player_choice(other_player_move);
             qApp->processEvents();
+            use_player_turn();
+            return;
         }
         else{
-            read(this->server , &my_turn , 1);
+            qDebug() << "LUNGIMEA" << strlen(other_player_move) << ':' << other_player_move << "\n";
             qApp->processEvents();
+            other_player_left();
+            my_turn = 0;
+            return;
         }
-        qApp->processEvents();
-        use_player_turn();
-        return;
-        qApp->processEvents();
-
     }
     if((my_turn == YELLOW_PLAYER && this->player_yellow == 1 ) || (my_turn == RED_PLAYER && this->player_red == 1)){
             this->show();
@@ -274,6 +271,7 @@ void MainWindow::use_player_turn()
         qDebug() << "WIN AICI AL DOILEA IF";
         read(this->server , &this_player_score , sizeof(int));
         read(this->server   , &other_player_score , sizeof(int));
+        qDebug() << "Blocat aici";
         ui->You->show();
         ui->You_actuall_number->show();
         ui->You_actuall_number->setText(QString::number(this_player_score));
@@ -316,12 +314,14 @@ void MainWindow::set_server(int fd_server)
 void MainWindow::set_other_player_choice(char * move)
 {
     QPushButton* button = this->findChild<QPushButton*>(move);
+    if(button != NULL){
     button->setDisabled(true);
-    if(this->player_red == 1){
-        button->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
-    }
-    else{
-        button->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        if(this->player_red == 1){
+            button->setStyleSheet("QPushButton:disabled {background-color: #FFFF00;}");
+        }
+        else{
+            button->setStyleSheet("QPushButton:disabled {background-color: #FF2400;}");
+        }
     }
 }
 
@@ -329,7 +329,10 @@ void MainWindow::set_other_player_choice(char * move)
 void MainWindow::set_current_player_choice(char * move)
 {
     QPushButton* button = this->findChild<QPushButton*>(move);
-    button->setEnabled(false);
+    if(button != NULL){
+       button->setEnabled(false);
+       qDebug() << "SUNT AICI";
+    }
 }
 
 
@@ -366,13 +369,6 @@ void MainWindow::pass_turn_gui()
     QCoreApplication::processEvents();
 }
 
-void MainWindow::update_turn_gui(){
-    QCoreApplication::processEvents();
-    ui->actual_turn_number->setText(QString::number(turn));
-    QCoreApplication::processEvents();
-}
-
-
 void MainWindow::manual_event_loop()
 {
     int exit_value = 0;
@@ -388,8 +384,30 @@ void MainWindow::manual_event_loop()
         qDebug() << "FAILED";
         return;
      }
-     qDebug() << "ASTEPT" << ':' << exit_value;
      qApp->processEvents();
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent *bar){
+    qDebug() << "AM AJUNS LA DESTRUCTOR";
+    MainMenu * p = (MainMenu* )this->parent();
+    p->~MainMenu();
+    this->~MainWindow();
+}
+
+void MainWindow::other_player_left()
+{
+    this->show();
+    this->setEnabled(true);
+    this->ui->gridLayoutWidget->hide();
+    this->ui->gridLayoutWidget_2->hide();
+    this->ui->gridLayoutWidget_3->hide();
+    this->ui->gridLayoutWidget_4->hide();
+    this->ui->gridLayoutWidget_5->hide();
+    this->ui->gridLayoutWidget_6->hide();
+    this->ui->gridLayoutWidget_7->hide();
+    this->ui->Back->blockSignals(false);
+    this->ui->end_game_box->setText("OTHER PLAYER LEFT");
+    this->ui->end_game_box->show();
 }
 

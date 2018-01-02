@@ -85,6 +85,7 @@ void MainMenu::main_menu_gui()
 
 void MainMenu::play_again()
 {
+    delete the_game;
     the_game = new class MainWindow(this);
     the_game->wait_turn_gui();
     the_game->set_server(server_descriptor);
