@@ -175,11 +175,11 @@ void MainWindow::set_color()
 {
 
     qDebug() << (int) player_red << ' ' << (int)player_yellow;
-    if(player_red == true){
+    if(player_red == 1){
          this->centralWidget()->setStyleSheet("QPushButton:hover {background-color: #FF2400;} QPushButton:disabled {background-color: #FF2400 ;} QPushButton {background-color: #FFFFFF; border: 1px solid black;border-radius: 5px;} ");
          return;
     }
-    if(player_yellow == true){
+    if(player_yellow == 1){
          this->centralWidget()->setStyleSheet("QPushButton:hover {background-color: #FFFF00;} QPushButton:disabled {background-color: #FFFF00;} QPushButton {background-color: #FFFFFF; border: 1px solid black;border-radius: 5px;} ");
          return;
     }
@@ -299,10 +299,17 @@ void MainWindow::use_player_turn()
         qDebug() << "WIN AICI AL TREILEA IF";
         read(this->server ,   &this_player_score ,  sizeof(int));
         read(this->server   , &other_player_score , sizeof(int));
+        ui->You->show();
+        ui->You_actuall_number->show();
+        ui->You_actuall_number->setText(QString::number(this_player_score));
+        ui->Opponent->show();
+        ui->Opponent_actual_number->show();
+        ui->Opponent_actual_number->setText(QString::number(other_player_score));
         qDebug() << this_player_score << ":" << other_player_score;
-        qApp->processEvents();
     }
-
+    if(my_turn == PLAYER_DISCONNECT){
+        other_player_left();
+    }
 }
 
 void MainWindow::set_server(int fd_server)

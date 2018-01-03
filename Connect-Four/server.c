@@ -27,6 +27,7 @@
 #define MAX_ROW 7 
 #define MAX_COL 8
 #define PLAYERS_DRAW 5
+#define PLAYER_DISCONNECT 9
 
 /* codul de eroare returnat de anumite apeluri */
 extern int errno;
@@ -218,7 +219,6 @@ static void *treat(void * arg)
 };
 
 
-
 int game_function(void * arg , int * player_one_score , int * player_two_score)
 {
    char set_color = rand() % 80;
@@ -240,11 +240,11 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     first_or_second = set_color % 2;
     write(game_info->player_two , &first_or_second , 1);
     game_info->first_player_color = set_color % 2;
-    if(turn_number == 1 && game_info->first_player_color == 0 || (turn_number == 0 && game_info->first_player_color == 1)){
+    if(game_info->first_player_color == 0){
       first_player = YELLOW_PLAYER;
       second_player = RED_PLAYER;
     }
-    if((turn_number == 1 && game_info->first_player_color == 1) || ( turn_number == 0 && game_info->first_player_color == 0)){
+    else{
       first_player = RED_PLAYER;
       second_player = YELLOW_PLAYER;
     }
@@ -259,12 +259,7 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
             printf("SA DECONECTAT JUCATORUL 1");
             fflush(stdout);
             random_exit = 1;
-            if(game_info->first_player_color != 0){
-                win_condition = YELLOW_PLAYER;
-            }
-            else{
-                win_condition = RED_PLAYER;
-            }
+            win_condition = PLAYER_DISCONNECT;
             break;
           }
           player_turn = (turn_number + 1) % 2;
@@ -272,12 +267,7 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
             printf("SA DECONECTAT JUCATORUL 2");
             fflush(stdout);
             random_exit = 1;
-            if(game_info->first_player_color == 0){
-                win_condition = YELLOW_PLAYER;
-            }
-            else{
-                win_condition = RED_PLAYER;
-            }
+            win_condition = PLAYER_DISCONNECT;
             break;
           }
           if(turn_number % 2 == 1){
@@ -335,7 +325,7 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
           }
           ++turn_number;
     }
-    if(turn_number == 42){
+    if(turn_number == 42 || turn_number == 43){
       printf("NUMARUL TUREI %i" , turn_number );
       fflush(stdout);
       win_condition = PLAYERS_DRAW; 
@@ -351,18 +341,10 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     if(win_condition == second_player || win_condition == PLAYERS_DRAW){
           ++(*player_two_score);
     } 
-    if(who_is_first == 1){
-          printf("%i" , (int)write(game_info->player_one , player_one_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_one , player_two_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_two , player_two_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_two , player_one_score , sizeof(int)));
-    }
-    else{
-          printf("%i" , (int)write(game_info->player_one , player_two_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_one , player_one_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_two , player_one_score , sizeof(int)));
-          printf("%i" , (int)write(game_info->player_two , player_two_score , sizeof(int)));
-    }
+    printf("%i" , (int)write(game_info->player_one , player_one_score , sizeof(int)));
+    printf("%i" , (int)write(game_info->player_one , player_two_score , sizeof(int)));
+    printf("%i" , (int)write(game_info->player_two , player_two_score , sizeof(int)));
+    printf("%i" , (int)write(game_info->player_two , player_one_score , sizeof(int)));
 
     if(random_exit == 1){
       return -1;

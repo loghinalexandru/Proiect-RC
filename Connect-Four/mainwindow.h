@@ -11,6 +11,7 @@
 #define RED_PLAYER  2
 #define YELLOW_PLAYER  3
 #define PLAYERS_DRAW 5
+#define PLAYER_DISCONNECT 9
 
 
 namespace Ui {
