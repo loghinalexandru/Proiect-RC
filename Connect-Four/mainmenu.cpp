@@ -13,6 +13,14 @@ MainMenu::MainMenu(QWidget *parent) :
 {
     ui->setupUi(this);
     this->ui->label->hide();
+    this->setWindowTitle("ConnectFour");
+    this->setWindowFlags(Qt::Dialog);
+    this->setFixedSize(779 , 384);
+    this->setStyleSheet("QMainWindow {background-color : black;} QPushButton:hover{background-color: red;}");
+    QPixmap pixmap("connect-four-wide.png");
+    this->ui->Title->setPixmap(pixmap);
+    this->ui->Title->show();
+    this->ui->Title->setScaledContents(true);
     connect(ui->Play , SIGNAL(released()) , this , SLOT(waiting_players_gui()));
     connect(ui->Exit , SIGNAL(released()) , this , SLOT(PressExit()));
 }
@@ -38,7 +46,8 @@ void MainMenu::PressPlay()
     server.sin_port = htons(DEFAULT_PORT);
     if(::connect(this->server_descriptor , (sockaddr*)&server , sizeof(sockaddr)) == -1){
         qDebug() << "ERROR ON CONNECT";
-        exit(1);
+        server_not_online_gui();
+        return;
     }
     the_game = new class MainWindow(this);
     the_game->wait_turn_gui();
@@ -97,4 +106,9 @@ void MainMenu::play_again()
     qApp->processEvents();
     //make_thread();
 
+}
+
+void MainMenu::server_not_online_gui()
+{
+    this->ui->label->setText("SERVER OFFLINE");
 }

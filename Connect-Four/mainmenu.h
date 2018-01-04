@@ -2,7 +2,6 @@
 #define MAINMENU_H
 
 #include <QMainWindow>
-#include <QApplication>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -30,6 +29,7 @@ public:
     int get_server_descriptor();
     void main_menu_gui();
     void play_again();
+    void server_not_online_gui();
     ~MainMenu();
 
 public slots:

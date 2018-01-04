@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#include <QSplashScreen>
 #include "ui_mainmenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,8 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
-    this->setWindowTitle("PLAYER 2");
+    this->setFixedSize(1239,604);
+    setWindowFlags(Qt::Dialog);
+    this->setWindowTitle("ConnectFour");
     ui->You->setText("<font color='white'>You: </font>");
     ui->You_actuall_number->hide();
     ui->You_actuall_number->setStyleSheet("QLabel { background-color : black; color : white;}");
