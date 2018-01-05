@@ -33,13 +33,10 @@
 extern int errno;
 
 typedef struct thData{
-	int idThread; //id-ul thread-ului tinut in evidenta de acest program
 	int player_one;
   int player_two; //descriptorul intors de accept
   int first_player_color;
 }thData;
-
-
 
 static void *treat(void *); /* functia executata de fiecare thread ce realizeaza comunicarea cu clientii */
 
@@ -89,10 +86,8 @@ int main ()
   struct sockaddr_in player_two;	
   int number_of_players = 0;
   signal(SIGPIPE, SIG_IGN);
-  int nr;		//mesajul primit de trimis la client 
   int sd;		//descriptorul de socket 
-  int pid;
-  pthread_t th[100];    //Identificatorii thread-urilor care se vor crea
+  pthread_t thread_id; 
 	int i=0;
   /* crearea unui socket */
   if ((sd = socket (AF_INET, SOCK_STREAM, 0)) == -1)
@@ -177,11 +172,10 @@ int main ()
     printf("%i\n" , check_file_descriptor(fd_player_two));
     fflush(stdout);
     td=(struct thData*)malloc(sizeof(struct thData));	
-	  td->idThread=i++;
 	  td->player_one = fd_player_one;
     td->player_two = fd_player_two;
     number_of_players = 0;
-	  pthread_create(&th[i], NULL, &treat, td);	   
+	  pthread_create( &thread_id, NULL, &treat, td);	   
   }	
 	}//while    
 };				
@@ -197,7 +191,6 @@ static void *treat(void * arg)
     struct thData * game_info = (struct thData *) arg;
   
     while(play_again_player_one && play_again_player_two){
-       printf("\nPLAYING AGAIN\t%i\n" , game_info->idThread);
         if(result = game_function(arg , &player_one_points , &player_two_points) == -1){
             break;
         }
@@ -251,10 +244,10 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     printf("PRIMU JUCATOR E : %d\n" , (int)first_player);
     printf("AL DOILEA JUCATOR E : %d\n" , (int)second_player);
     while(!win_condition  && !random_exit && turn_number != 42){
-          char a[20];
+          char client_response[20];
           fflush(stdout);
           char player_turn = turn_number % 2;
-          memset(a , 0 , sizeof(a));
+          memset(client_response , 0 , sizeof(client_response));
           if(write(game_info->player_one , &player_turn , 1) == -1){
             printf("SA DECONECTAT JUCATORUL 1");
             fflush(stdout);
@@ -272,12 +265,12 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
           }
           if(turn_number % 2 == 1){
               printf("TURA JUCATORULUI UNU\n");
-              read(game_info->player_one , a , sizeof(a));
+              read(game_info->player_one , client_response , sizeof(client_response));
               fflush(stdout);
               int i;
               int x = -1 , y =  -1;
-              x = a[1] - 48;
-              y = a[3] - 48;
+              x = client_response[1] - 48;
+              y = client_response[3] - 48;
               for(int i = x; i < 6; ++i){
                   if(game_matrix[i+1][y] == 0){
                     ++x;
@@ -291,19 +284,19 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               else{
                   game_matrix[x][y] = RED_PLAYER;
               } 
-              a[1] = x + 48;
+              client_response[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              write(game_info->player_two , a , sizeof(a));
-              write(game_info->player_one , a , sizeof(a));
+              write(game_info->player_two , client_response , sizeof(client_response));
+              write(game_info->player_one , client_response , sizeof(client_response));
           }
           else{
               printf("TURA JUCATORULUI DOI\n");
-              read(game_info->player_two , a , sizeof(a));
+              read(game_info->player_two , client_response , sizeof(client_response));
               fflush(stdout);
               int i;
               int x = -1 , y = -1;
-              x = a[1] - 48;
-              y = a[3] - 48;
+              x = client_response[1] - 48;
+              y = client_response[3] - 48;
               for(int i = x ; i < 6; ++i){
                   if(game_matrix[i + 1][y] == 0){
                     ++x;
@@ -318,10 +311,10 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               else{
                   game_matrix[x][y] = RED_PLAYER;
               }   
-              a[1] = x + 48;
+              client_response[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              write(game_info->player_two , a , sizeof(a)); 
-              write(game_info->player_one , a , sizeof(a));          
+              write(game_info->player_two , client_response , sizeof(client_response)); 
+              write(game_info->player_one , client_response , sizeof(client_response));          
           }
           ++turn_number;
     }
