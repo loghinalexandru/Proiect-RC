@@ -34,6 +34,7 @@ public:
     void pass_turn_gui();
     void manual_event_loop();
     void player_left_gui();
+    void server_crash();
     void closeEvent(QCloseEvent * bar);
     ~MainWindow();
 

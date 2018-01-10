@@ -1,12 +1,3 @@
-/* servTCPConcTh2.c - Exemplu de server TCP concurent care deserveste clientii
-   prin crearea unui thread pentru fiecare client.
-   Asteapta un numar de la clienti si intoarce clientilor numarul incrementat.
-	Intoarce corect identificatorul din program al thread-ului.
-  
-   
-   Autor: Lenuta Alboaie  <adria@infoiasi.ro> (c)2009
-*/
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -139,9 +130,6 @@ int main ()
 
       printf ("[server]Asteptam la portul %d...\n",PORT);
       fflush (stdout);
-
-	//client= malloc(sizeof(int));
-      /* acceptam un client (stare blocanta pina la realizarea conexiunii) */
   
   if ( (fd_player_one = accept (sd, (struct sockaddr *) &player_one, &length_player_one)) < 0)
 	{
@@ -161,11 +149,6 @@ int main ()
 
       ++number_of_players;
   }
-  /* s-a realizat conexiunea, se astepta mesajul */
-    
-	int idThread; //id-ul threadului
-	int cl; //descriptorul intors de accept
-
 
   if(number_of_players == 2){
     printf("%i\n" , check_file_descriptor(fd_player_one));
@@ -286,8 +269,8 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               } 
               client_response[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              write(game_info->player_two , client_response , sizeof(client_response));
               write(game_info->player_one , client_response , sizeof(client_response));
+              write(game_info->player_two , client_response , sizeof(client_response));
           }
           else{
               printf("TURA JUCATORULUI DOI\n");
@@ -313,8 +296,8 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
               }   
               client_response[1] = x + 48;
               win_condition = check_win_condition(game_matrix);
-              write(game_info->player_two , client_response , sizeof(client_response)); 
-              write(game_info->player_one , client_response , sizeof(client_response));          
+              write(game_info->player_one , client_response , sizeof(client_response)); 
+              write(game_info->player_two , client_response , sizeof(client_response));          
           }
           ++turn_number;
     }
@@ -325,8 +308,8 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     }
     fflush(stdout);
     printf("\n");
-    printf("%i" , (int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
     printf("%i" , (int)write(game_info->player_one , &win_condition , sizeof(win_condition)));
+    printf("%i" , (int)write(game_info->player_two , &win_condition , sizeof(win_condition)));
     fflush(stdout);
     if(win_condition == first_player || win_condition == PLAYERS_DRAW){
           ++(*player_one_score);

@@ -9,11 +9,12 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setQuitOnLastWindowClosed(true);
     QSplashScreen * intro = new QSplashScreen;
-    MainMenu main_menu;
+    MainMenu *main_menu = new MainMenu();
+    main_menu->setAttribute(Qt::WA_DeleteOnClose);
     intro->setPixmap(QPixmap("./connectfour_intro.jpg"));
     intro->show();
-
     QGraphicsOpacityEffect *opacity;
     opacity = new QGraphicsOpacityEffect(intro);
     intro->setGraphicsEffect(opacity);
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     anim->setDuration(30000);
     anim->start(QAbstractAnimation::DeleteWhenStopped);
     QTimer::singleShot(2000 , intro , SLOT(close()));
-    QTimer::singleShot(2000 , &main_menu , SLOT(show()));
+    QTimer::singleShot(2000 , main_menu , SLOT(show()));
     return a.exec();
 }
 

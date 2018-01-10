@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <string>
-#include <iostream>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include "mainwindow.h"
@@ -26,7 +25,6 @@ class MainMenu : public QMainWindow
 public:
     explicit MainMenu(QWidget *parent = 0);
     friend class MainWindow;
-    int get_server_descriptor();
     void main_menu_gui();
     void play_again();
     void server_not_online_gui();

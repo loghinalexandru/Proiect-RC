@@ -133,6 +133,18 @@ void MainWindow::BackToMenu()
     ::close(p->server_descriptor);
     ::close(this->server);
     p->main_menu_gui();
+}
+
+void MainWindow::server_crash()
+{
+    MainMenu * p;
+    char player_rematch = 0;
+    write(this->server , &player_rematch , 1);
+    p = (MainMenu* )this->parentWidget();
+    ::close(p->server_descriptor);
+    ::close(this->server);
+    p->main_menu_gui();
+    p->server_not_online_gui();
     this->~MainWindow();
 }
 
@@ -163,9 +175,12 @@ void MainWindow::set_disc(bool is_clicked)
     qApp->processEvents();
     const char * button_object_name;
     button_object_name = button_pressed->objectName().toStdString().c_str();
-    write(this->server , button_object_name , strlen(button_object_name));
-    qDebug() << "Am trecut de write";
-    read(this->server ,set_button , sizeof(set_button));
+    qDebug() << write(this->server , button_object_name , strlen(button_object_name));
+    if(read(this->server ,set_button , sizeof(set_button)) <= 0){
+        qDebug() << "Server crashed";
+        server_crash();
+        return;
+    }
     this->set_current_player_choice(set_button);
     qApp->processEvents();
     use_player_turn();
@@ -192,10 +207,10 @@ void MainWindow::use_player_turn()
     QCoreApplication::processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
     if(read(this->server , &my_turn , 1) == -1){
-        qDebug() << "O CRAPAT";
+        qDebug() << "O CRAPAT" << (int)my_turn;
+        server_crash();
         return;
     }
-    qDebug() << "GO ? : " << (int)my_turn;
     if(this->my_turn == 1){
         qApp->processEvents();
         pass_turn_gui();
@@ -210,9 +225,7 @@ void MainWindow::use_player_turn()
         wait_turn_gui();
         manual_event_loop();
         qApp->processEvents();
-        qDebug() << "ASTEPT SA IES DIN EVENT LOOP";
         read(this->server , other_player_move , sizeof(other_player_move));
-        qDebug() << "AM IESIT DIN LOOP SI AM CITIT" << other_player_move;
         if(strlen(other_player_move) > 0){
             this->set_other_player_choice(other_player_move);
             qApp->processEvents();
@@ -220,9 +233,8 @@ void MainWindow::use_player_turn()
             return;
         }
         else{
-            qDebug() << "LUNGIMEA" << strlen(other_player_move) << ':' << other_player_move << "\n";
             qApp->processEvents();
-            other_player_left();
+            this->other_player_left();
             my_turn = 0;
             return;
         }
@@ -241,7 +253,6 @@ void MainWindow::use_player_turn()
             this->ui->end_game_box->setText("YOU ARE THE WINNER");
             this->ui->end_game_box->show();
             this->ui->Rematch->show();
-            qDebug() << "WIN AICI PRIMU IF";
             read(this->server , &this_player_score , sizeof(int));
             read(this->server   , &other_player_score , sizeof(int));
             ui->You->show();
@@ -250,7 +261,6 @@ void MainWindow::use_player_turn()
             ui->Opponent->show();
             ui->Opponent_actual_number->show();
             ui->Opponent_actual_number->setText(QString::number(other_player_score));
-            qDebug() << this_player_score << ":" << other_player_score;
             qApp->processEvents();
 
     }
@@ -268,17 +278,14 @@ void MainWindow::use_player_turn()
         this->ui->end_game_box->setText("YOU HAVE BEEN DEFEATED");
         this->ui->end_game_box->show();
         this->ui->Rematch->show();
-        qDebug() << "WIN AICI AL DOILEA IF";
         read(this->server , &this_player_score , sizeof(int));
         read(this->server   , &other_player_score , sizeof(int));
-        qDebug() << "Blocat aici";
         ui->You->show();
         ui->You_actuall_number->show();
         ui->You_actuall_number->setText(QString::number(this_player_score));
         ui->Opponent->show();
         ui->Opponent_actual_number->show();
         ui->Opponent_actual_number->setText(QString::number(other_player_score));
-        qDebug() << this_player_score << ":" << other_player_score;
 
     }
     if(my_turn == PLAYERS_DRAW){
@@ -296,7 +303,6 @@ void MainWindow::use_player_turn()
         this->ui->end_game_box->show();
         this->ui->Rematch->show();
         qApp->processEvents();
-        qDebug() << "WIN AICI AL TREILEA IF";
         read(this->server ,   &this_player_score ,  sizeof(int));
         read(this->server   , &other_player_score , sizeof(int));
         ui->You->show();
@@ -305,10 +311,11 @@ void MainWindow::use_player_turn()
         ui->Opponent->show();
         ui->Opponent_actual_number->show();
         ui->Opponent_actual_number->setText(QString::number(other_player_score));
-        qDebug() << this_player_score << ":" << other_player_score;
     }
     if(my_turn == PLAYER_DISCONNECT){
+        qDebug() << "AM INTRAT AICI";
         other_player_left();
+        return;
     }
 }
 
@@ -389,7 +396,7 @@ void MainWindow::manual_event_loop()
     exit_value = select(this->server + 1 , &readfds , NULL , NULL  , &waiting_time);
      if(exit_value == -1){
         qDebug() << "FAILED";
-        return;
+        this->close();
      }
      qApp->processEvents();
     }
@@ -399,7 +406,6 @@ void MainWindow::closeEvent(QCloseEvent *bar){
     qDebug() << "AM AJUNS LA DESTRUCTOR";
     MainMenu * p = (MainMenu* )this->parent();
     p->~MainMenu();
-    this->~MainWindow();
 }
 
 void MainWindow::other_player_left()

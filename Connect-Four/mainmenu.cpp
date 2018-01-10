@@ -27,9 +27,8 @@ MainMenu::MainMenu(QWidget *parent) :
 
 MainMenu::~MainMenu()
 {
-    delete ui;
     ::close(this->server_descriptor);
-    delete(the_game);
+    delete ui;
 }
 
 void MainMenu::PressPlay()
@@ -50,11 +49,16 @@ void MainMenu::PressPlay()
         return;
     }
     the_game = new class MainWindow(this);
+    the_game->setAttribute(Qt::WA_DeleteOnClose);
     the_game->wait_turn_gui();
     the_game->set_server(server_descriptor);
     the_game->manual_event_loop();
-    ::read(the_game->server , &the_game->player_red , 1);
-    ::read(the_game->server , &the_game->player_yellow , 1);
+    if(read(the_game->server , &the_game->player_red , 1) <= 0){
+        server_not_online_gui();
+    }
+    if(read(the_game->server , &the_game->player_yellow , 1) <= 0){
+        server_not_online_gui();
+    }
     this->hide();
     the_game->set_color();
     the_game->use_player_turn();
@@ -63,14 +67,8 @@ void MainMenu::PressPlay()
 
 void MainMenu::PressExit()
 {
-    close();
+    this->close();
 }
-
-int MainMenu::get_server_descriptor()
-{
-    return this->server_descriptor;
-}
-
 
 void MainMenu::waiting_players_gui()
 {
@@ -84,6 +82,7 @@ void MainMenu::waiting_players_gui()
 
 void MainMenu::main_menu_gui()
 {
+    delete the_game;
     this->show();
     this->ui->Play->show();
     this->ui->Exit->show();
@@ -104,11 +103,13 @@ void MainMenu::play_again()
     the_game->set_color();
     the_game->use_player_turn();
     qApp->processEvents();
-    //make_thread();
 
 }
 
 void MainMenu::server_not_online_gui()
 {
+    this->ui->Play->hide();
+    this->ui->Exit->hide();
+    this->ui->label->show();
     this->ui->label->setText("SERVER OFFLINE");
 }
