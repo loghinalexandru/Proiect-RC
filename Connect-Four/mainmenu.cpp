@@ -52,7 +52,10 @@ void MainMenu::PressPlay()
     the_game->setAttribute(Qt::WA_DeleteOnClose);
     the_game->wait_turn_gui();
     the_game->set_server(server_descriptor);
-    the_game->manual_event_loop();
+    if(the_game->manual_event_loop() == -1){
+        qDebug() << "SERVER";
+        return;
+    }
     if(read(the_game->server , &the_game->player_red , 1) <= 0){
         server_not_online_gui();
     }
@@ -108,6 +111,7 @@ void MainMenu::play_again()
 
 void MainMenu::server_not_online_gui()
 {
+    this->show();
     this->ui->Play->hide();
     this->ui->Exit->hide();
     this->ui->label->show();

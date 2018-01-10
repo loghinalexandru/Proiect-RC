@@ -64,50 +64,50 @@ MainWindow::MainWindow(QWidget *parent) :
     make_round_buttons(ui->p4_7);
     make_round_buttons(ui->p5_7);
     make_round_buttons(ui->p6_7);
-    connect(ui->Back , SIGNAL(clicked(bool)) , this , SLOT(BackToMenu()));
-    connect(ui->Rematch , SIGNAL(clicked(bool)) , this , SLOT(Rematch()));
-    connect(ui->p1_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_1 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_2 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_3 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_4 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_5 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_6 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p1_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p2_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p3_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p4_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p5_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
-    connect(ui->p6_7 , SIGNAL(clicked(bool)) , this , SLOT(set_disc(bool)));
+    connect(ui->Back , SIGNAL(clicked()) , this , SLOT(BackToMenu()));
+    connect(ui->Rematch , SIGNAL(clicked()) , this , SLOT(Rematch()));
+    connect(ui->p1_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_1 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_2 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_3 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_4 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_5 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_6 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p1_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p2_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p3_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p4_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p5_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
+    connect(ui->p6_7 , SIGNAL(clicked()) , this , SLOT(set_disc()));
 }
 
 
@@ -119,8 +119,8 @@ MainWindow::~MainWindow()
 void MainWindow::make_round_buttons(QPushButton *p){
     p->setFixedHeight(81);
     p->setFixedWidth(81);
-    QRect *rect = new QRect(0,0,80,80);
-    QRegion* region = new QRegion(*rect,QRegion::Ellipse);
+    QRect *rectangle = new QRect(0,0,80,80);
+    QRegion* region = new QRegion(*rectangle,QRegion::Ellipse);
     p->setMask(*region);
 }
 
@@ -138,12 +138,9 @@ void MainWindow::BackToMenu()
 void MainWindow::server_crash()
 {
     MainMenu * p;
-    char player_rematch = 0;
-    write(this->server , &player_rematch , 1);
     p = (MainMenu* )this->parentWidget();
     ::close(p->server_descriptor);
     ::close(this->server);
-    p->main_menu_gui();
     p->server_not_online_gui();
     this->~MainWindow();
 }
@@ -167,17 +164,18 @@ void MainWindow::Rematch()
     }
 }
 
-void MainWindow::set_disc(bool is_clicked)
+void MainWindow::set_disc()
 {
-    char set_button[20];
+    char set_button[10];
+    memset(set_button , 0 , sizeof(set_button));
     QPushButton * button_pressed = (QPushButton *)sender();
     wait_turn_gui();
     qApp->processEvents();
     const char * button_object_name;
     button_object_name = button_pressed->objectName().toStdString().c_str();
-    qDebug() << write(this->server , button_object_name , strlen(button_object_name));
-    if(read(this->server ,set_button , sizeof(set_button)) <= 0){
-        qDebug() << "Server crashed";
+    write(this->server , button_object_name , strlen(button_object_name) + 1);
+    if(read(this->server , set_button , sizeof(set_button)) <= 0){
+        qDebug() << "crapat serveru";
         server_crash();
         return;
     }
@@ -188,8 +186,6 @@ void MainWindow::set_disc(bool is_clicked)
 
 void MainWindow::set_color()
 {
-
-    qDebug() << (int) player_red << ' ' << (int)player_yellow;
     if(player_red == 1){
          this->centralWidget()->setStyleSheet("QPushButton:hover {background-color: #FF2400;} QPushButton:disabled {background-color: #FF2400 ;} QPushButton {background-color: #FFFFFF; border: 1px solid black;border-radius: 5px;} ");
          return;
@@ -203,11 +199,10 @@ void MainWindow::set_color()
 
 void MainWindow::use_player_turn()
 {
-    char other_player_move[20];
+    char other_player_move[10];
     QCoreApplication::processEvents();
     memset(other_player_move , 0 , sizeof(other_player_move));
     if(read(this->server , &my_turn , 1) == -1){
-        qDebug() << "O CRAPAT" << (int)my_turn;
         server_crash();
         return;
     }
@@ -223,7 +218,9 @@ void MainWindow::use_player_turn()
         this->setEnabled(false);
         this->show();
         wait_turn_gui();
-        manual_event_loop();
+        if(manual_event_loop() == -1){
+
+        }
         qApp->processEvents();
         read(this->server , other_player_move , sizeof(other_player_move));
         if(strlen(other_player_move) > 0){
@@ -313,7 +310,6 @@ void MainWindow::use_player_turn()
         ui->Opponent_actual_number->setText(QString::number(other_player_score));
     }
     if(my_turn == PLAYER_DISCONNECT){
-        qDebug() << "AM INTRAT AICI";
         other_player_left();
         return;
     }
@@ -345,7 +341,6 @@ void MainWindow::set_current_player_choice(char * move)
     QPushButton* button = this->findChild<QPushButton*>(move);
     if(button != NULL){
        button->setEnabled(false);
-       qDebug() << "SUNT AICI";
     }
 }
 
@@ -383,7 +378,7 @@ void MainWindow::pass_turn_gui()
     QCoreApplication::processEvents();
 }
 
-void MainWindow::manual_event_loop()
+int MainWindow::manual_event_loop()
 {
     int exit_value = 0;
     fd_set readfds;
@@ -396,14 +391,13 @@ void MainWindow::manual_event_loop()
     exit_value = select(this->server + 1 , &readfds , NULL , NULL  , &waiting_time);
      if(exit_value == -1){
         qDebug() << "FAILED";
-        this->close();
+        return exit_value;
      }
      qApp->processEvents();
     }
 }
 
 void MainWindow::closeEvent(QCloseEvent *bar){
-    qDebug() << "AM AJUNS LA DESTRUCTOR";
     MainMenu * p = (MainMenu* )this->parent();
     p->~MainMenu();
 }

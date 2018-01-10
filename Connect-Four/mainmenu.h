@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
-#include <string>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include "mainwindow.h"

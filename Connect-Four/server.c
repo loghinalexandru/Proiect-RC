@@ -33,12 +33,6 @@ static void *treat(void *); /* functia executata de fiecare thread ce realizeaza
 
 int game_function();
 
-int check_file_descriptor(int file_descriptor)
-{
-  return fcntl(file_descriptor , F_GETFD) == -1 || errno == EBADF;
-}
-
-
 int check_win_condition(char playing_matrix[MAX_ROW][MAX_COL]) { 
      for (int i = 1; i < MAX_ROW; ++i) {
      for (int j = 1; j < MAX_COL; ++j) {
@@ -151,8 +145,6 @@ int main ()
   }
 
   if(number_of_players == 2){
-    printf("%i\n" , check_file_descriptor(fd_player_one));
-    printf("%i\n" , check_file_descriptor(fd_player_two));
     fflush(stdout);
     td=(struct thData*)malloc(sizeof(struct thData));	
 	  td->player_one = fd_player_one;
@@ -227,7 +219,7 @@ int game_function(void * arg , int * player_one_score , int * player_two_score)
     printf("PRIMU JUCATOR E : %d\n" , (int)first_player);
     printf("AL DOILEA JUCATOR E : %d\n" , (int)second_player);
     while(!win_condition  && !random_exit && turn_number != 42){
-          char client_response[20];
+          char client_response[10];
           fflush(stdout);
           char player_turn = turn_number % 2;
           memset(client_response , 0 , sizeof(client_response));

@@ -32,7 +32,7 @@ public:
     void other_player_left();
     void wait_turn_gui();
     void pass_turn_gui();
-    void manual_event_loop();
+    int manual_event_loop();
     void player_left_gui();
     void server_crash();
     void closeEvent(QCloseEvent * bar);
@@ -43,7 +43,7 @@ public:
 public slots:
     void BackToMenu();
     void Rematch();
-    void set_disc(bool is_clicked);
+    void set_disc();
     void use_player_turn();
     void set_color();
 
@@ -55,8 +55,6 @@ private:
     char player_red = 2;
     int this_player_score = 0;
     int other_player_score = 0;
-    char turn = 0;
-    char action_made = 0;
 };
 
 #endif // MAINWINDOW_H
